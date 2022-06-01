@@ -112,4 +112,9 @@ class MovieTrailerActivity : YouTubeBaseActivity() {
   private fun showCanceledMessage() {
     showErrorMessage(getString(R.string.canceled_message))
   }
+
+  override fun onDestroy() {
+    viewModel.onDestroy()
+    super.onDestroy()
+  }
 }

@@ -1,8 +1,9 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
+import com.dpfht.tmdbmvvm.base.BaseUseCase
 import com.dpfht.tmdbmvvm.data.model.Movie
 
-interface GetMovieByGenreUseCase {
+interface GetMovieByGenreUseCase: BaseUseCase {
 
   operator fun invoke(
     genreId: Int,

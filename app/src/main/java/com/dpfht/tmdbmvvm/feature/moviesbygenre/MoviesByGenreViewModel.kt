@@ -76,4 +76,9 @@ class MoviesByGenreViewModel @Inject constructor(
 
     return MoviesByGenreFragmentDirections.actionMovieByGenreToMovieDetails(movie.id)
   }
+
+  override fun onCleared() {
+    getMovieByGenreUseCase.onDestroy()
+    super.onCleared()
+  }
 }

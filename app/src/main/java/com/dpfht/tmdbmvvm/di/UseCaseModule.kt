@@ -13,28 +13,46 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import io.reactivex.disposables.CompositeDisposable
 
 @Module
 @InstallIn(ViewModelComponent::class)
 class UseCaseModule {
 
   @Provides
-  fun provideGetMovieGenreUseCase(appRepository: AppRepository): GetMovieGenreUseCase {
-    return GetMovieGenreUseCaseImpl(appRepository)
+  fun provideCompositeDisposable(): CompositeDisposable {
+    return CompositeDisposable()
   }
 
   @Provides
-  fun provideGetMovieByGenreUseCase(appRepository: AppRepository): GetMovieByGenreUseCase {
-    return GetMovieByGenreUseCaseImpl(appRepository)
+  fun provideGetMovieGenreUseCase(
+    appRepository: AppRepository,
+    compositeDisposable: CompositeDisposable
+  ): GetMovieGenreUseCase {
+    return GetMovieGenreUseCaseImpl(appRepository, compositeDisposable)
   }
 
   @Provides
-  fun provideGetMovieDetailsUseCase(appRepository: AppRepository): GetMovieDetailsUseCase {
-    return GetMovieDetailsUseCaseImpl(appRepository)
+  fun provideGetMovieByGenreUseCase(
+    appRepository: AppRepository,
+    compositeDisposable: CompositeDisposable
+  ): GetMovieByGenreUseCase {
+    return GetMovieByGenreUseCaseImpl(appRepository, compositeDisposable)
   }
 
   @Provides
-  fun provideGetMovieReviewUseCase(appRepository: AppRepository): GetMovieReviewUseCase {
-    return GetMovieReviewUseCaseImpl(appRepository)
+  fun provideGetMovieDetailsUseCase(
+    appRepository: AppRepository,
+    compositeDisposable: CompositeDisposable
+  ): GetMovieDetailsUseCase {
+    return GetMovieDetailsUseCaseImpl(appRepository, compositeDisposable)
+  }
+
+  @Provides
+  fun provideGetMovieReviewUseCase(
+    appRepository: AppRepository,
+    compositeDisposable: CompositeDisposable
+  ): GetMovieReviewUseCase {
+    return GetMovieReviewUseCaseImpl(appRepository, compositeDisposable)
   }
 }

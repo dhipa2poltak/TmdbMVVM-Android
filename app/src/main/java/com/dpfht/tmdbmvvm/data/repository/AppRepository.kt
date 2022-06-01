@@ -5,17 +5,17 @@ import com.dpfht.tmdbmvvm.data.model.response.GenreResponse
 import com.dpfht.tmdbmvvm.data.model.response.MovieDetailsResponse
 import com.dpfht.tmdbmvvm.data.model.response.ReviewResponse
 import com.dpfht.tmdbmvvm.data.model.response.TrailerResponse
-import retrofit2.Call
+import io.reactivex.Observable
 
 interface AppRepository {
 
-  fun getMovieGenre():  Call<GenreResponse?>
+  fun getMovieGenre():  Observable<GenreResponse>
 
-  fun getMoviesByGenre(genreId: String, page: Int): Call<DiscoverMovieByGenreResponse?>
+  fun getMoviesByGenre(genreId: String, page: Int): Observable<DiscoverMovieByGenreResponse>
 
-  fun getMovieDetail(movieId: Int): Call<MovieDetailsResponse?>
+  fun getMovieDetail(movieId: Int): Observable<MovieDetailsResponse>
 
-  fun getMovieReviews(movieId: Int, page: Int): Call<ReviewResponse?>
+  fun getMovieReviews(movieId: Int, page: Int): Observable<ReviewResponse>
 
-  fun getMovieTrailer(movieId: Int): Call<TrailerResponse?>
+  fun getMovieTrailer(movieId: Int): Observable<TrailerResponse>
 }

@@ -69,4 +69,9 @@ class MovieReviewsViewModel @Inject constructor(
     mIsLoadingData = false
     mShowCanceledMessage.postValue(true)
   }
+
+  override fun onCleared() {
+    getMovieReviewUseCase.onDestroy()
+    super.onCleared()
+  }
 }

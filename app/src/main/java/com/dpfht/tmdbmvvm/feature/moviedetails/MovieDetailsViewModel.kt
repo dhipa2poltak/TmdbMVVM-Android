@@ -91,4 +91,9 @@ class MovieDetailsViewModel @Inject constructor(
   fun getNavDirectionsToMovieReviews(): NavDirections {
     return MovieDetailsFragmentDirections.actionMovieDetailsToMovieReviews(_movieId, title)
   }
+
+  override fun onCleared() {
+    getMovieDetailsUseCase.onDestroy()
+    super.onCleared()
+  }
 }

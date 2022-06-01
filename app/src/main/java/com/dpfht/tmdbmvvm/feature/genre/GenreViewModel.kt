@@ -55,4 +55,9 @@ class GenreViewModel @Inject constructor(
       genre.id, genre.name ?: ""
     )
   }
+
+  override fun onCleared() {
+    getMovieGenreUseCase.onDestroy()
+    super.onCleared()
+  }
 }

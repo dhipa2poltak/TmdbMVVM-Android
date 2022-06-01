@@ -4,9 +4,13 @@ import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
 import com.dpfht.tmdbmvvm.data.model.Review
 import com.dpfht.tmdbmvvm.data.model.response.ReviewResponse
 import com.dpfht.tmdbmvvm.data.repository.AppRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class GetMovieReviewUseCaseImpl(
-  private val appRepository: AppRepository
+  private val appRepository: AppRepository,
+  private val compositeDisposable: CompositeDisposable
 ): GetMovieReviewUseCase {
 
   override operator fun invoke(
@@ -16,20 +20,31 @@ class GetMovieReviewUseCaseImpl(
     onError: (String) -> Unit,
     onCancel: () -> Unit
   ) {
-    appRepository.getMovieReviews(movieId, page).enqueue(object : CallbackWrapper<ReviewResponse?>() {
-      override fun onSuccessCall(responseBody: ReviewResponse?) {
-        responseBody?.results?.let {
-          onSuccess(it, responseBody.page)
+    val subs = appRepository.getMovieReviews(movieId, page)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribeWith(object : CallbackWrapper<ReviewResponse>() {
+        override fun onSuccessCall(responseBody: ReviewResponse) {
+          responseBody.results?.let {
+            onSuccess(it, responseBody.page)
+          }
         }
-      }
 
-      override fun onErrorCall(message: String) {
-        onError(message)
-      }
+        override fun onErrorCall(message: String) {
+          onError(message)
+        }
 
-      override fun onCancelCall() {
-        onCancel()
-      }
-    })
+        override fun onCancelCall() {
+          onCancel()
+        }
+      })
+
+    compositeDisposable.add(subs)
+  }
+
+  override fun onDestroy() {
+    if (!compositeDisposable.isDisposed) {
+      compositeDisposable.dispose()
+    }
   }
 }

@@ -63,4 +63,8 @@ class MovieTrailerViewModel(
   fun onCancel() {
     mShowCanceledMessage.postValue(true)
   }
+
+  fun onDestroy() {
+    getMovieTrailerUseCase.onDestroy()
+  }
 }
