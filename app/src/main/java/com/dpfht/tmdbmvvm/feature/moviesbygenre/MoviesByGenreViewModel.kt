@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.dpfht.tmdbmvvm.base.BaseViewModel
-import com.dpfht.tmdbmvvm.data.model.Movie
+import com.dpfht.tmdbmvvm.data.model.remote.Movie
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieByGenreUseCase
 import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.ErrorResult
 import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.Success

@@ -1,14 +1,13 @@
-package com.dpfht.tmdbmvvm.data.model.response
+package com.dpfht.tmdbmvvm.data.model.remote.response
 
-import com.dpfht.tmdbmvvm.data.model.Review
+import com.dpfht.tmdbmvvm.data.model.remote.Movie
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 @Suppress("unused")
-data class ReviewResponse(
-    var id: Int = 0,
+data class DiscoverMovieByGenreResponse(
     var page: Int = 0,
-    var results: List<Review>? = null,
+    var results: List<Movie>? = null,
 
     @SerializedName("total_pages")
     @Expose

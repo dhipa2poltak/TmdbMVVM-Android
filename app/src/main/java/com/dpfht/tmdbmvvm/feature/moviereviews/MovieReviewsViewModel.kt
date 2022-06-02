@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.dpfht.tmdbmvvm.base.BaseViewModel
-import com.dpfht.tmdbmvvm.data.model.Review
+import com.dpfht.tmdbmvvm.data.model.remote.Review
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieReviewUseCase
 import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.ErrorResult
 import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.Success

@@ -1,4 +1,4 @@
-package com.dpfht.tmdbmvvm.data.model
+package com.dpfht.tmdbmvvm.data.model.remote
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
