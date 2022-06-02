@@ -2,7 +2,9 @@ package com.dpfht.tmdbmvvm.di
 
 import com.dpfht.tmdbmvvm.BuildConfig
 import com.dpfht.tmdbmvvm.Config
+import com.dpfht.tmdbmvvm.data.api.AuthInterceptor
 import com.dpfht.tmdbmvvm.data.api.RestService
+import com.dpfht.tmdbmvvm.data.api.UnsafeOkHttpClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,36 +50,16 @@ class NetworkModule {
 
   @Provides
   @Singleton
-  fun provideClient(
-    certificatePinner: CertificatePinner,
-    httpLoggingInterceptor: HttpLoggingInterceptor
-  ): OkHttpClient {
+  fun provideClient(certificatePinner: CertificatePinner): OkHttpClient {
+    if (BuildConfig.DEBUG) {
+      return UnsafeOkHttpClient.getUnsafeOkHttpClient()
+    }
+
     val httpClientBuilder = OkHttpClient()
       .newBuilder()
       .certificatePinner(certificatePinner)
 
-    if (!httpClientBuilder.interceptors().contains(httpLoggingInterceptor) && BuildConfig.DEBUG) {
-      httpClientBuilder.addInterceptor(httpLoggingInterceptor)
-    }
-
-    httpClientBuilder.addInterceptor(object : Interceptor {
-      override fun intercept(chain: Chain): Response {
-        val original = chain.request()
-        val originalHttpUrl = original.url
-
-        val url = originalHttpUrl.newBuilder()
-          .addQueryParameter("api_key", Config.API_KEY)
-          .build()
-
-        val requestBuilder = original.newBuilder()
-          .url(url)
-          .method(original.method, original.body)
-
-        val request = requestBuilder.build()
-
-        return chain.proceed(request)
-      }
-    })
+    httpClientBuilder.addInterceptor(AuthInterceptor())
 
     return httpClientBuilder.build()
   }
