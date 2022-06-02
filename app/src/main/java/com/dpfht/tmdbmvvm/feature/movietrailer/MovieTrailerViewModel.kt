@@ -8,6 +8,8 @@ import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.ErrorResult
 import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.Success
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -78,4 +80,10 @@ class MovieTrailerViewModel(
     mShowCanceledMessage.postValue(true)
   }
   */
+
+  fun onDestroy() {
+    if (scope.isActive) {
+      scope.cancel()
+    }
+  }
 }
