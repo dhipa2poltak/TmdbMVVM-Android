@@ -1,8 +1,8 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
 import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
-import com.dpfht.tmdbmvvm.data.model.Genre
-import com.dpfht.tmdbmvvm.data.model.response.GenreResponse
+import com.dpfht.tmdbmvvm.data.model.remote.Genre
+import com.dpfht.tmdbmvvm.data.model.remote.response.GenreResponse
 import com.dpfht.tmdbmvvm.data.repository.AppRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

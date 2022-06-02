@@ -3,7 +3,7 @@ package com.dpfht.tmdbmvvm.feature.moviereviews.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.dpfht.tmdbmvvm.data.model.Review
+import com.dpfht.tmdbmvvm.data.model.remote.Review
 import com.dpfht.tmdbmvvm.databinding.RowReviewBinding
 import com.squareup.picasso.Picasso
 import javax.inject.Inject

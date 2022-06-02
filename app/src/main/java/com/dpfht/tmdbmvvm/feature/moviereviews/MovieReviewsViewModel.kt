@@ -3,7 +3,7 @@ package com.dpfht.tmdbmvvm.feature.moviereviews
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dpfht.tmdbmvvm.base.BaseViewModel
-import com.dpfht.tmdbmvvm.data.model.Review
+import com.dpfht.tmdbmvvm.data.model.remote.Review
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieReviewUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

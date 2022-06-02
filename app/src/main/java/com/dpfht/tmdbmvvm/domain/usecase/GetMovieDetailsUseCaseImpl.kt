@@ -1,7 +1,7 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
 import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
-import com.dpfht.tmdbmvvm.data.model.response.MovieDetailsResponse
+import com.dpfht.tmdbmvvm.data.model.remote.response.MovieDetailsResponse
 import com.dpfht.tmdbmvvm.data.repository.AppRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

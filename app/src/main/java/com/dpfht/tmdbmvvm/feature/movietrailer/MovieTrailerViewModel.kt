@@ -2,7 +2,7 @@ package com.dpfht.tmdbmvvm.feature.movietrailer
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dpfht.tmdbmvvm.data.model.Trailer
+import com.dpfht.tmdbmvvm.data.model.remote.Trailer
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieTrailerUseCase
 import java.util.Locale
 

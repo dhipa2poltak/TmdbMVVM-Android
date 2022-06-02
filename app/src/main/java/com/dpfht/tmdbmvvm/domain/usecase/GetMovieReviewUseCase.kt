@@ -1,7 +1,7 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
 import com.dpfht.tmdbmvvm.base.BaseUseCase
-import com.dpfht.tmdbmvvm.data.model.Review
+import com.dpfht.tmdbmvvm.data.model.remote.Review
 
 interface GetMovieReviewUseCase: BaseUseCase {
 
