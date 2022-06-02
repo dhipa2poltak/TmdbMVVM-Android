@@ -5,14 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavDirections
 import com.dpfht.tmdbmvvm.Config
 import com.dpfht.tmdbmvvm.base.BaseViewModel
-import com.dpfht.tmdbmvvm.data.model.remote.response.MovieDetailsResponse
+import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
+import com.dpfht.tmdbmvvm.domain.model.GetMovieDetailsResult
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
-  val getMovieDetailsUseCase: GetMovieDetailsUseCase
+  val getMovieDetailsUseCase: GetMovieDetailsUseCase,
+  val compositeDisposable: CompositeDisposable
 ): BaseViewModel() {
 
   private var _movieId = -1
@@ -56,20 +61,36 @@ class MovieDetailsViewModel @Inject constructor(
 
   private fun getMovieDetails() {
     mIsShowDialogLoading.postValue(true)
-    getMovieDetailsUseCase(
-      _movieId, this::onSuccess, this::onError, this::onCancel
-    )
+
+    val subs = getMovieDetailsUseCase(_movieId)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribeWith(object : CallbackWrapper<GetMovieDetailsResult>() {
+        override fun onSuccessCall(result: GetMovieDetailsResult) {
+          onSuccess(result.movieId, result.title, result.overview, result.posterPath)
+        }
+
+        override fun onErrorCall(message: String) {
+          onError(message)
+        }
+
+        override fun onCancelCall() {
+          onCancel()
+        }
+      })
+
+    compositeDisposable.add(subs)
   }
 
-  private fun onSuccess(response: MovieDetailsResponse) {
+  private fun onSuccess(pId: Int, pTitle: String, pOverview: String, pPosterPath: String) {
     imageUrl = ""
-    if (response.posterPath != null) {
-      imageUrl = Config.IMAGE_URL_BASE_PATH + response.posterPath
+    if (pPosterPath.isNotEmpty()) {
+      imageUrl = Config.IMAGE_URL_BASE_PATH + pPosterPath
     }
 
-    _movieId = response.id
-    title = response.title ?: ""
-    overview = response.overview ?: ""
+    _movieId = pId
+    title = pTitle
+    overview = pOverview
 
     _titleData.postValue(title)
     _overviewData.postValue(overview)
@@ -93,7 +114,9 @@ class MovieDetailsViewModel @Inject constructor(
   }
 
   override fun onCleared() {
-    getMovieDetailsUseCase.onDestroy()
+    if (!compositeDisposable.isDisposed) {
+      compositeDisposable.dispose()
+    }
     super.onCleared()
   }
 }

@@ -4,15 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavDirections
 import com.dpfht.tmdbmvvm.base.BaseViewModel
+import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
 import com.dpfht.tmdbmvvm.data.model.remote.Genre
+import com.dpfht.tmdbmvvm.domain.model.GetMovieGenreResult
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieGenreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @HiltViewModel
 class GenreViewModel @Inject constructor(
   val getMovieGenreUseCase: GetMovieGenreUseCase,
-  val genres: ArrayList<Genre>
+  val genres: ArrayList<Genre>,
+  val compositeDisposable: CompositeDisposable
 ) : BaseViewModel() {
 
   private val _notifyItemInserted = MutableLiveData<Int>()
@@ -27,7 +33,25 @@ class GenreViewModel @Inject constructor(
 
   private fun getMovieGenre() {
     mIsShowDialogLoading.postValue(true)
-    getMovieGenreUseCase(this::onSuccess, this::onError, this::onCancel)
+
+    val subs = getMovieGenreUseCase()
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribeWith(object : CallbackWrapper<GetMovieGenreResult>() {
+        override fun onSuccessCall(result: GetMovieGenreResult) {
+          onSuccess(result.genres)
+        }
+
+        override fun onErrorCall(message: String) {
+          onError(message)
+        }
+
+        override fun onCancelCall() {
+          onCancel()
+        }
+      })
+
+    compositeDisposable.add(subs)
   }
 
   private fun onSuccess(genres: List<Genre>) {
@@ -57,7 +81,9 @@ class GenreViewModel @Inject constructor(
   }
 
   override fun onCleared() {
-    getMovieGenreUseCase.onDestroy()
+    if (!compositeDisposable.isDisposed) {
+      compositeDisposable.dispose()
+    }
     super.onCleared()
   }
 }

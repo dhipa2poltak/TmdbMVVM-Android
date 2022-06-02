@@ -3,15 +3,21 @@ package com.dpfht.tmdbmvvm.feature.moviereviews
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dpfht.tmdbmvvm.base.BaseViewModel
+import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
 import com.dpfht.tmdbmvvm.data.model.remote.Review
+import com.dpfht.tmdbmvvm.domain.model.GetMovieReviewResult
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieReviewUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieReviewsViewModel @Inject constructor(
   val getMovieReviewUseCase: GetMovieReviewUseCase,
-  val reviews: ArrayList<Review>
+  val reviews: ArrayList<Review>,
+  val compositeDisposable: CompositeDisposable
 ): BaseViewModel() {
 
   private var _movieId = -1
@@ -37,9 +43,25 @@ class MovieReviewsViewModel @Inject constructor(
 
     mIsShowDialogLoading.postValue(true)
     mIsLoadingData = true
-    getMovieReviewUseCase(
-      _movieId, page + 1, this::onSuccess, this::onError, this::onCancel
-    )
+
+    val subs = getMovieReviewUseCase(_movieId, page + 1)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribeWith(object : CallbackWrapper<GetMovieReviewResult>() {
+        override fun onSuccessCall(result: GetMovieReviewResult) {
+          onSuccess(result.reviews, result.page)
+        }
+
+        override fun onErrorCall(message: String) {
+          onError(message)
+        }
+
+        override fun onCancelCall() {
+          onCancel()
+        }
+      })
+
+    compositeDisposable.add(subs)
   }
 
   private fun onSuccess(reviews: List<Review>, page: Int) {
@@ -71,7 +93,9 @@ class MovieReviewsViewModel @Inject constructor(
   }
 
   override fun onCleared() {
-    getMovieReviewUseCase.onDestroy()
+    if (!compositeDisposable.isDisposed) {
+      compositeDisposable.dispose()
+    }
     super.onCleared()
   }
 }

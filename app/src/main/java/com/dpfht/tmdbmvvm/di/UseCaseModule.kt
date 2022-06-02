@@ -25,34 +25,22 @@ class UseCaseModule {
   }
 
   @Provides
-  fun provideGetMovieGenreUseCase(
-    appRepository: AppRepository,
-    compositeDisposable: CompositeDisposable
-  ): GetMovieGenreUseCase {
-    return GetMovieGenreUseCaseImpl(appRepository, compositeDisposable)
+  fun provideGetMovieGenreUseCase(appRepository: AppRepository): GetMovieGenreUseCase {
+    return GetMovieGenreUseCaseImpl(appRepository)
   }
 
   @Provides
-  fun provideGetMovieByGenreUseCase(
-    appRepository: AppRepository,
-    compositeDisposable: CompositeDisposable
-  ): GetMovieByGenreUseCase {
-    return GetMovieByGenreUseCaseImpl(appRepository, compositeDisposable)
+  fun provideGetMovieByGenreUseCase(appRepository: AppRepository, ): GetMovieByGenreUseCase {
+    return GetMovieByGenreUseCaseImpl(appRepository)
   }
 
   @Provides
-  fun provideGetMovieDetailsUseCase(
-    appRepository: AppRepository,
-    compositeDisposable: CompositeDisposable
-  ): GetMovieDetailsUseCase {
-    return GetMovieDetailsUseCaseImpl(appRepository, compositeDisposable)
+  fun provideGetMovieDetailsUseCase(appRepository: AppRepository): GetMovieDetailsUseCase {
+    return GetMovieDetailsUseCaseImpl(appRepository)
   }
 
   @Provides
-  fun provideGetMovieReviewUseCase(
-    appRepository: AppRepository,
-    compositeDisposable: CompositeDisposable
-  ): GetMovieReviewUseCase {
-    return GetMovieReviewUseCaseImpl(appRepository, compositeDisposable)
+  fun provideGetMovieReviewUseCase(appRepository: AppRepository): GetMovieReviewUseCase {
+    return GetMovieReviewUseCaseImpl(appRepository)
   }
 }

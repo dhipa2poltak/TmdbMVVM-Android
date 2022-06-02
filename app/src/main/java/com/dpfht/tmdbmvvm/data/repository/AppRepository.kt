@@ -1,21 +1,21 @@
 package com.dpfht.tmdbmvvm.data.repository
 
-import com.dpfht.tmdbmvvm.data.model.remote.response.DiscoverMovieByGenreResponse
-import com.dpfht.tmdbmvvm.data.model.remote.response.GenreResponse
-import com.dpfht.tmdbmvvm.data.model.remote.response.MovieDetailsResponse
-import com.dpfht.tmdbmvvm.data.model.remote.response.ReviewResponse
-import com.dpfht.tmdbmvvm.data.model.remote.response.TrailerResponse
+import com.dpfht.tmdbmvvm.domain.model.GetMovieByGenreResult
+import com.dpfht.tmdbmvvm.domain.model.GetMovieDetailsResult
+import com.dpfht.tmdbmvvm.domain.model.GetMovieGenreResult
+import com.dpfht.tmdbmvvm.domain.model.GetMovieReviewResult
+import com.dpfht.tmdbmvvm.domain.model.GetMovieTrailerResult
 import io.reactivex.Observable
 
 interface AppRepository {
 
-  fun getMovieGenre():  Observable<GenreResponse>
+  fun getMovieGenre():  Observable<GetMovieGenreResult>
 
-  fun getMoviesByGenre(genreId: String, page: Int): Observable<DiscoverMovieByGenreResponse>
+  fun getMoviesByGenre(genreId: String, page: Int): Observable<GetMovieByGenreResult>
 
-  fun getMovieDetail(movieId: Int): Observable<MovieDetailsResponse>
+  fun getMovieDetail(movieId: Int): Observable<GetMovieDetailsResult>
 
-  fun getMovieReviews(movieId: Int, page: Int): Observable<ReviewResponse>
+  fun getMovieReviews(movieId: Int, page: Int): Observable<GetMovieReviewResult>
 
-  fun getMovieTrailer(movieId: Int): Observable<TrailerResponse>
+  fun getMovieTrailer(movieId: Int): Observable<GetMovieTrailerResult>
 }

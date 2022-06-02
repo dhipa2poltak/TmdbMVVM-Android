@@ -1,12 +1,10 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
 import com.dpfht.tmdbmvvm.base.BaseUseCase
-import com.dpfht.tmdbmvvm.data.model.remote.Genre
+import com.dpfht.tmdbmvvm.domain.model.GetMovieGenreResult
+import io.reactivex.Observable
 
 interface GetMovieGenreUseCase: BaseUseCase {
 
-  operator fun invoke(
-    onSuccess: (List<Genre>) -> Unit,
-    onError: (String) -> Unit,
-    onCancel: () -> Unit)
+  operator fun invoke(): Observable<GetMovieGenreResult>
 }

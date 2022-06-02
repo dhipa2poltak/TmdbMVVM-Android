@@ -7,8 +7,8 @@ import java.io.IOException
 
 abstract class CallbackWrapper<T : Any>: DisposableObserver<T>() {
 
-  override fun onNext(responseBody: T) {
-    onSuccessCall(responseBody)
+  override fun onNext(result: T) {
+    onSuccessCall(result)
   }
 
   override fun onError(e: Throwable) {

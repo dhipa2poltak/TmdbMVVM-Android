@@ -2,13 +2,20 @@ package com.dpfht.tmdbmvvm.feature.movietrailer
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
 import com.dpfht.tmdbmvvm.data.model.remote.Trailer
+import com.dpfht.tmdbmvvm.domain.model.GetMovieTrailerResult
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieTrailerUseCase
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.util.Locale
 
 class MovieTrailerViewModel(
   val getMovieTrailerUseCase: GetMovieTrailerUseCase
 ) {
+
+  val compositeDisposable = CompositeDisposable()
 
   private var _movieId = -1
 
@@ -35,9 +42,24 @@ class MovieTrailerViewModel(
   }
 
   private fun getMovieTrailer() {
-    getMovieTrailerUseCase(
-      _movieId, this::onSuccess, this::onError, this::onCancel
-    )
+    val subs = getMovieTrailerUseCase(_movieId)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribeWith(object : CallbackWrapper<GetMovieTrailerResult>() {
+        override fun onSuccessCall(result: GetMovieTrailerResult) {
+          onSuccess(result.trailers)
+        }
+
+        override fun onErrorCall(message: String) {
+          onError(message)
+        }
+
+        override fun onCancelCall() {
+          onCancel()
+        }
+      })
+
+    compositeDisposable.add(subs)
   }
 
   fun onSuccess(trailers: List<Trailer>) {
@@ -65,6 +87,8 @@ class MovieTrailerViewModel(
   }
 
   fun onDestroy() {
-    getMovieTrailerUseCase.onDestroy()
+    if (!compositeDisposable.isDisposed) {
+      compositeDisposable.dispose()
+    }
   }
 }
