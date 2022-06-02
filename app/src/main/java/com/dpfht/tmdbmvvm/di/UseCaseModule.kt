@@ -30,7 +30,7 @@ class UseCaseModule {
   }
 
   @Provides
-  fun provideGetMovieByGenreUseCase(appRepository: AppRepository, ): GetMovieByGenreUseCase {
+  fun provideGetMovieByGenreUseCase(appRepository: AppRepository): GetMovieByGenreUseCase {
     return GetMovieByGenreUseCaseImpl(appRepository)
   }
 
