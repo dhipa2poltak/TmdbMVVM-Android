@@ -1,13 +1,10 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
-import com.dpfht.tmdbmvvm.data.model.Trailer
+import com.dpfht.tmdbmvvm.domain.model.GetMovieTrailerResult
 
 interface GetMovieTrailerUseCase {
 
-  operator fun invoke(
-    movieId: Int,
-    onSuccess: (List<Trailer>) -> Unit,
-    onError: (String) -> Unit,
-    onCancel: () -> Unit
-  )
+  suspend operator fun invoke(
+    movieId: Int
+  ): UseCaseResultWrapper<GetMovieTrailerResult>
 }

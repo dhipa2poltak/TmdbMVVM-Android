@@ -1,5 +1,6 @@
 package com.dpfht.tmdbmvvm.util
 
+/*
 import com.dpfht.tmdbmvvm.data.api.ErrorResponse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -17,3 +18,4 @@ object ErrorUtil {
     }
   }
 }
+*/

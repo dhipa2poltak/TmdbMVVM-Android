@@ -5,7 +5,6 @@ import com.dpfht.tmdbmvvm.data.model.response.GenreResponse
 import com.dpfht.tmdbmvvm.data.model.response.MovieDetailsResponse
 import com.dpfht.tmdbmvvm.data.model.response.ReviewResponse
 import com.dpfht.tmdbmvvm.data.model.response.TrailerResponse
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -13,25 +12,25 @@ import retrofit2.http.Query
 interface RestService {
 
   @GET("genre/movie/list")
-  fun getMovieGenre():  Call<GenreResponse>
+  suspend fun getMovieGenre():  GenreResponse
 
   @GET("discover/movie")
-  fun getMoviesByGenre(
+  suspend fun getMoviesByGenre(
     @Query("with_genres") genreId: String,
-    @Query("page") page: Int): Call<DiscoverMovieByGenreResponse>
+    @Query("page") page: Int): DiscoverMovieByGenreResponse
 
   @GET("movie/{movie_id}")
-  fun getMovieDetail(
-    @Path("movie_id") movieId: Int): Call<MovieDetailsResponse>
+  suspend fun getMovieDetail(
+    @Path("movie_id") movieId: Int): MovieDetailsResponse
 
   @GET("movie/{movie_id}/reviews")
-  fun getMovieReviews(
+  suspend fun getMovieReviews(
     @Path("movie_id") movieId: Int,
     @Query("page") page: Int,
-    @Query("language") language: String = "en-US"): Call<ReviewResponse>
+    @Query("language") language: String = "en-US"): ReviewResponse
 
   @GET("movie/{movie_id}/videos")
-  fun getMovieTrailers(
+  suspend fun getMovieTrailers(
     @Path("movie_id") movieId: Int,
-    @Query("language") language: String = "en-US"): Call<TrailerResponse>
+    @Query("language") language: String = "en-US"): TrailerResponse
 }

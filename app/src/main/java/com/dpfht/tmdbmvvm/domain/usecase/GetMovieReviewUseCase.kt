@@ -1,14 +1,11 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
-import com.dpfht.tmdbmvvm.data.model.Review
+import com.dpfht.tmdbmvvm.domain.model.GetMovieReviewResult
 
 interface GetMovieReviewUseCase {
 
-  operator fun invoke(
+  suspend operator fun invoke(
     movieId: Int,
-    page: Int,
-    onSuccess: (List<Review>, Int) -> Unit,
-    onError: (String) -> Unit,
-    onCancel: () -> Unit
-  )
+    page: Int
+  ): UseCaseResultWrapper<GetMovieReviewResult>
 }

@@ -16,7 +16,7 @@ abstract class BaseViewModel: ViewModel() {
   val errorMessage: LiveData<String>
     get() = mErrorMessage
 
-  protected val mShowCanceledMessage = MutableLiveData<Boolean>()
+  private val mShowCanceledMessage = MutableLiveData<Boolean>()
   val showCanceledMessage: LiveData<Boolean>
     get() = mShowCanceledMessage
 

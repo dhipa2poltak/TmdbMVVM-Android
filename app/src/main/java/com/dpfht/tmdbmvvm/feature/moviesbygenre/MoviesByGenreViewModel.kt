@@ -2,11 +2,16 @@ package com.dpfht.tmdbmvvm.feature.moviesbygenre
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.dpfht.tmdbmvvm.base.BaseViewModel
 import com.dpfht.tmdbmvvm.data.model.Movie
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieByGenreUseCase
+import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.ErrorResult
+import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,9 +43,17 @@ class MoviesByGenreViewModel @Inject constructor(
 
     mIsShowDialogLoading.postValue(true)
     mIsLoadingData = true
-    getMovieByGenreUseCase(
-      _genreId, page + 1, this::onSuccess, this::onError, this::onCancel
-    )
+
+    viewModelScope.launch(Dispatchers.Main) {
+      when (val result = getMovieByGenreUseCase(_genreId, page + 1)) {
+        is Success -> {
+          onSuccess(result.value.movies, result.value.page)
+        }
+        is ErrorResult -> {
+          onError(result.message)
+        }
+      }
+    }
   }
 
   private fun onSuccess(movies: List<Movie>, page: Int) {
@@ -65,11 +78,13 @@ class MoviesByGenreViewModel @Inject constructor(
     mErrorMessage.postValue(message)
   }
 
+  /*
   private fun onCancel() {
     mIsShowDialogLoading.postValue(false)
     mIsLoadingData = false
     mShowCanceledMessage.postValue(true)
   }
+  */
 
   fun getNavDirectionsOnClickMovieAt(position: Int): NavDirections {
     val movie = movies[position]

@@ -1,5 +1,6 @@
 package com.dpfht.tmdbmvvm.data.api
 
+/*
 import com.dpfht.tmdbmvvm.util.ErrorUtil
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,3 +37,4 @@ abstract class CallbackWrapper<T>: Callback<T> {
 
   protected abstract fun onCancelCall()
 }
+*/

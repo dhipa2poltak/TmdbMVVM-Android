@@ -2,10 +2,15 @@ package com.dpfht.tmdbmvvm.feature.moviereviews
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.dpfht.tmdbmvvm.base.BaseViewModel
 import com.dpfht.tmdbmvvm.data.model.Review
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieReviewUseCase
+import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.ErrorResult
+import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,11 +40,19 @@ class MovieReviewsViewModel @Inject constructor(
   fun getMovieReviews() {
     if (isEmptyNextResponse) return
 
-    mIsShowDialogLoading.postValue(true)
-    mIsLoadingData = true
-    getMovieReviewUseCase(
-      _movieId, page + 1, this::onSuccess, this::onError, this::onCancel
-    )
+    viewModelScope.launch(Dispatchers.Main) {
+      mIsShowDialogLoading.postValue(true)
+      mIsLoadingData = true
+
+      when (val result = getMovieReviewUseCase(_movieId, page + 1)) {
+        is Success -> {
+          onSuccess(result.value.reviews, result.value.page)
+        }
+        is ErrorResult -> {
+          onError(result.message)
+        }
+      }
+    }
   }
 
   private fun onSuccess(reviews: List<Review>, page: Int) {
@@ -64,9 +77,11 @@ class MovieReviewsViewModel @Inject constructor(
     mErrorMessage.postValue(message)
   }
 
+  /*
   private fun onCancel() {
     mIsShowDialogLoading.postValue(false)
     mIsLoadingData = false
     mShowCanceledMessage.postValue(true)
   }
+  */
 }

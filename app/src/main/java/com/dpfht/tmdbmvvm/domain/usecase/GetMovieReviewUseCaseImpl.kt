@@ -1,35 +1,34 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
-import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
-import com.dpfht.tmdbmvvm.data.model.Review
-import com.dpfht.tmdbmvvm.data.model.response.ReviewResponse
+import com.dpfht.tmdbmvvm.data.api.ResultWrapper.GenericError
+import com.dpfht.tmdbmvvm.data.api.ResultWrapper.NetworkError
+import com.dpfht.tmdbmvvm.data.api.ResultWrapper.Success
 import com.dpfht.tmdbmvvm.data.repository.AppRepository
+import com.dpfht.tmdbmvvm.domain.model.GetMovieReviewResult
 
 class GetMovieReviewUseCaseImpl(
   private val appRepository: AppRepository
 ): GetMovieReviewUseCase {
 
-  override operator fun invoke(
+  override suspend operator fun invoke(
     movieId: Int,
-    page: Int,
-    onSuccess: (List<Review>, Int) -> Unit,
-    onError: (String) -> Unit,
-    onCancel: () -> Unit
-  ) {
-    appRepository.getMovieReviews(movieId, page).enqueue(object : CallbackWrapper<ReviewResponse>() {
-      override fun onSuccessCall(responseBody: ReviewResponse) {
-        responseBody.results?.let {
-          onSuccess(it, responseBody.page)
+    page: Int
+  ): UseCaseResultWrapper<GetMovieReviewResult> {
+    return when (val response = appRepository.getMovieReviews(movieId, page)) {
+      is Success -> {
+        val reviews = response.value.results ?: arrayListOf()
+        UseCaseResultWrapper.Success(GetMovieReviewResult(reviews, response.value.page))
+      }
+      is GenericError -> {
+        if (response.code != null && response.error != null) {
+          UseCaseResultWrapper.ErrorResult(response.error.statusMessage ?: "")
+        } else {
+          UseCaseResultWrapper.ErrorResult("error in conversion")
         }
       }
-
-      override fun onErrorCall(message: String) {
-        onError(message)
+      is NetworkError -> {
+        UseCaseResultWrapper.ErrorResult("error in connection")
       }
-
-      override fun onCancelCall() {
-        onCancel()
-      }
-    })
+    }
   }
 }

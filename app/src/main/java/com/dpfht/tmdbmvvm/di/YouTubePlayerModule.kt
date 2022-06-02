@@ -8,10 +8,22 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 
 @Module
 @InstallIn(SingletonComponent::class)
 class YouTubePlayerModule {
+
+  @Provides
+  fun provideJob(): Job {
+    return Job()
+  }
+
+  @Provides
+  fun provideCoroutineScope(job: Job): CoroutineScope {
+    return CoroutineScope(job)
+  }
 
   @Provides
   fun provideGetMovieTrailerUseCase(appRepository: AppRepository): GetMovieTrailerUseCase {
@@ -19,7 +31,10 @@ class YouTubePlayerModule {
   }
 
   @Provides
-  fun provideYouTubePlayerViewModel(useCase: GetMovieTrailerUseCase): MovieTrailerViewModel {
-    return MovieTrailerViewModel(useCase)
+  fun provideYouTubePlayerViewModel(
+    useCase: GetMovieTrailerUseCase,
+    scope: CoroutineScope
+  ): MovieTrailerViewModel {
+    return MovieTrailerViewModel(useCase, scope)
   }
 }

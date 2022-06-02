@@ -4,10 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dpfht.tmdbmvvm.data.model.Trailer
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieTrailerUseCase
+import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.ErrorResult
+import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.Success
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class MovieTrailerViewModel(
-  val getMovieTrailerUseCase: GetMovieTrailerUseCase
+  val getMovieTrailerUseCase: GetMovieTrailerUseCase,
+  private val scope: CoroutineScope
 ) {
 
   private var _movieId = -1
@@ -35,12 +41,19 @@ class MovieTrailerViewModel(
   }
 
   private fun getMovieTrailer() {
-    getMovieTrailerUseCase(
-      _movieId, this::onSuccess, this::onError, this::onCancel
-    )
+    scope.launch(Dispatchers.Main) {
+      when (val result = getMovieTrailerUseCase(_movieId)) {
+        is Success -> {
+          onSuccess(result.value.trailers)
+        }
+        is ErrorResult -> {
+          onError(result.message)
+        }
+      }
+    }
   }
 
-  fun onSuccess(trailers: List<Trailer>) {
+  private fun onSuccess(trailers: List<Trailer>) {
     var keyVideo = ""
     for (trailer in trailers) {
       if (trailer.site?.lowercase(Locale.ROOT)
@@ -56,11 +69,13 @@ class MovieTrailerViewModel(
     }
   }
 
-  fun onError(message: String) {
+  private fun onError(message: String) {
     mErrorMessage.postValue(message)
   }
 
+  /*
   fun onCancel() {
     mShowCanceledMessage.postValue(true)
   }
+  */
 }

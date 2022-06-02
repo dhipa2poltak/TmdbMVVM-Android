@@ -2,12 +2,17 @@ package com.dpfht.tmdbmvvm.feature.moviedetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.dpfht.tmdbmvvm.Config
 import com.dpfht.tmdbmvvm.base.BaseViewModel
-import com.dpfht.tmdbmvvm.data.model.response.MovieDetailsResponse
+import com.dpfht.tmdbmvvm.domain.model.GetMovieDetailsResult
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieDetailsUseCase
+import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.ErrorResult
+import com.dpfht.tmdbmvvm.domain.usecase.UseCaseResultWrapper.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,21 +60,28 @@ class MovieDetailsViewModel @Inject constructor(
   }
 
   private fun getMovieDetails() {
-    mIsShowDialogLoading.postValue(true)
-    getMovieDetailsUseCase(
-      _movieId, this::onSuccess, this::onError, this::onCancel
-    )
+    viewModelScope.launch(Dispatchers.Main) {
+      mIsShowDialogLoading.postValue(true)
+      when (val result = getMovieDetailsUseCase(_movieId)) {
+        is Success -> {
+          onSuccess(result.value)
+        }
+        is ErrorResult -> {
+          onError(result.message)
+        }
+      }
+    }
   }
 
-  private fun onSuccess(response: MovieDetailsResponse) {
+  private fun onSuccess(result: GetMovieDetailsResult) {
     imageUrl = ""
-    if (response.posterPath != null) {
-      imageUrl = Config.IMAGE_URL_BASE_PATH + response.posterPath
+    if (result.posterPath.isNotEmpty()) {
+      imageUrl = Config.IMAGE_URL_BASE_PATH + result.posterPath
     }
 
-    _movieId = response.id
-    title = response.title ?: ""
-    overview = response.overview ?: ""
+    _movieId = result.movieId
+    title = result.title
+    overview = result.overview
 
     _titleData.postValue(title)
     _overviewData.postValue(overview)
@@ -83,10 +95,12 @@ class MovieDetailsViewModel @Inject constructor(
     mErrorMessage.postValue(message)
   }
 
+  /*
   private fun onCancel() {
     mIsShowDialogLoading.postValue(false)
     mShowCanceledMessage.postValue(true)
   }
+  */
 
   fun getNavDirectionsToMovieReviews(): NavDirections {
     return MovieDetailsFragmentDirections.actionMovieDetailsToMovieReviews(_movieId, title)

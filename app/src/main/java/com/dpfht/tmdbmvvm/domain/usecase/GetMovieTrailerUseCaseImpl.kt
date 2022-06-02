@@ -1,34 +1,33 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
-import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
-import com.dpfht.tmdbmvvm.data.model.Trailer
-import com.dpfht.tmdbmvvm.data.model.response.TrailerResponse
+import com.dpfht.tmdbmvvm.data.api.ResultWrapper.GenericError
+import com.dpfht.tmdbmvvm.data.api.ResultWrapper.NetworkError
+import com.dpfht.tmdbmvvm.data.api.ResultWrapper.Success
 import com.dpfht.tmdbmvvm.data.repository.AppRepository
+import com.dpfht.tmdbmvvm.domain.model.GetMovieTrailerResult
 
 class GetMovieTrailerUseCaseImpl(
   private val appRepository: AppRepository
 ): GetMovieTrailerUseCase {
 
-  override operator fun invoke(
-    movieId: Int,
-    onSuccess: (List<Trailer>) -> Unit,
-    onError: (String) -> Unit,
-    onCancel: () -> Unit
-  ) {
-    appRepository.getMovieTrailer(movieId).enqueue(object : CallbackWrapper<TrailerResponse>() {
-      override fun onSuccessCall(responseBody: TrailerResponse) {
-        responseBody.results?.let {
-          onSuccess(it)
+  override suspend operator fun invoke(
+    movieId: Int
+  ): UseCaseResultWrapper<GetMovieTrailerResult> {
+    return when (val response = appRepository.getMovieTrailer(movieId)) {
+      is Success -> {
+        val trailers = response.value.results ?: arrayListOf()
+        UseCaseResultWrapper.Success(GetMovieTrailerResult(trailers))
+      }
+      is GenericError -> {
+        if (response.code != null && response.error != null) {
+          UseCaseResultWrapper.ErrorResult(response.error.statusMessage ?: "")
+        } else {
+          UseCaseResultWrapper.ErrorResult("error in conversion")
         }
       }
-
-      override fun onErrorCall(message: String) {
-        onError(message)
+      is NetworkError -> {
+        UseCaseResultWrapper.ErrorResult("error in connection")
       }
-
-      override fun onCancelCall() {
-        onCancel()
-      }
-    })
+    }
   }
 }
