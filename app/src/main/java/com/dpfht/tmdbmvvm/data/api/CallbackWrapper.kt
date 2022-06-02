@@ -7,8 +7,8 @@ import java.io.IOException
 
 abstract class CallbackWrapper<T : Any>: DisposableObserver<T>() {
 
-  override fun onNext(result: T) {
-    onSuccessCall(result)
+  override fun onNext(t: T) {
+    onSuccessCall(t)
   }
 
   override fun onError(e: Throwable) {
@@ -28,7 +28,7 @@ abstract class CallbackWrapper<T : Any>: DisposableObserver<T>() {
 
   override fun onComplete() {}
 
-  protected abstract fun onSuccessCall(responseBody: T)
+  protected abstract fun onSuccessCall(result: T)
 
   protected abstract fun onErrorCall(message: String)
 
