@@ -10,69 +10,69 @@ import com.google.gson.annotations.SerializedName
 @Suppress("unused")
 data class MovieDetailsResponse(
 
-    var adult: Boolean = false,
+    val adult: Boolean = false,
 
     @SerializedName("backdrop_path")
     @Expose
-    var backdropPath: String? = null,
+    val backdropPath: String? = null,
 
     @SerializedName("belongs_to_collection")
     @Expose
-    var belongsToCollection: Any? = null,
+    val belongsToCollection: Any? = null,
 
-    var budget: Int = 0,
-    var genres: List<Genre>? = null,
-    var homepage: String? = null,
-    var id: Int = 0,
+    val budget: Int = 0,
+    val genres: List<Genre>? = null,
+    val homepage: String? = null,
+    val id: Int = 0,
 
     @SerializedName("imdb_id")
     @Expose
-    var imdbId: String? = null,
+    val imdbId: String? = null,
 
     @SerializedName("original_language")
     @Expose
-    var originalLanguage: String? = null,
+    val originalLanguage: String? = null,
 
     @SerializedName("original_title")
     @Expose
-    var originalTitle: String? = null,
+    val originalTitle: String? = null,
 
-    var overview: String? = null,
-    var popularity: Float = 0.0f,
+    val overview: String? = null,
+    val popularity: Float = 0.0f,
 
     @SerializedName("poster_path")
     @Expose
-    var posterPath: String? = null,
+    val posterPath: String? = null,
 
     @SerializedName("production_companies")
     @Expose
-    var productionCompanies: List<ProductionCompany>? = null,
+    val productionCompanies: List<ProductionCompany>? = null,
 
     @SerializedName("production_countries")
     @Expose
-    var productionCountries: List<ProductionCountry>? = null,
+    val productionCountries: List<ProductionCountry>? = null,
 
     @SerializedName("release_date")
     @Expose
-    var releaseDate: String? = null,
+    val releaseDate: String? = null,
 
-    var revenue: Int = 0,
-    var runtime: Int = 0,
+    val revenue: Int = 0,
+    val runtime: Int = 0,
 
     @SerializedName("spoken_languages")
     @Expose
-    var spokenLanguages: List<SpokenLanguage>? = null,
+    val spokenLanguages: List<SpokenLanguage>? = null,
 
-    var status: String? = null,
-    var tagline: String? = null,
-    var title: String? = null,
-    var video: Boolean = false,
+    val status: String? = null,
+    val tagline: String? = null,
+    val title: String? = null,
+    val video: Boolean = false,
 
     @SerializedName("vote_average")
     @Expose
-    var voteAverage: Float = 0.0f,
+    val voteAverage: Float = 0.0f,
 
     @SerializedName("vote_count")
     @Expose
-    var voteCount: Int = 0
+    val voteCount: Int = 0
 )

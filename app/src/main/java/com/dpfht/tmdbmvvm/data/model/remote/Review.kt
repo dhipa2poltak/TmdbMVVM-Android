@@ -6,23 +6,23 @@ import java.util.Date
 
 @Suppress("unused")
 data class Review(
-    var author: String? = null,
+    val author: String? = null,
 
     @SerializedName("author_details")
     @Expose
-    var authorDetails: AuthorDetails? = null,
+    val authorDetails: AuthorDetails? = null,
 
-    var content: String? = null,
+    val content: String? = null,
 
     @SerializedName("created_at")
     @Expose
-    var createdAt: Date? = null,
+    val createdAt: Date? = null,
 
-    var id: String? = null,
+    val id: String? = null,
 
     @SerializedName("updated_at")
     @Expose
-    var updatedAt: Date? = null,
+    val updatedAt: Date? = null,
 
-    var url: String? = null
+    val url: String? = null
 )

@@ -5,45 +5,45 @@ import com.google.gson.annotations.SerializedName
 
 @Suppress("unused")
 data class Movie(
-    var adult: Boolean = false,
+    val adult: Boolean = false,
 
     @SerializedName("backdrop_path")
     @Expose
-    var backdropPath: String? = null,
+    val backdropPath: String? = null,
 
     @SerializedName("genre_ids")
     @Expose
-    var genreIds: List<Int>? = null,
+    val genreIds: List<Int>? = null,
 
-    var id: Int = 0,
+    val id: Int = 0,
 
     @SerializedName("original_language")
     @Expose
-    var originalLanguage: String? = null,
+    val originalLanguage: String? = null,
 
     @SerializedName("original_title")
     @Expose
-    var originalTitle: String? = null,
+    val originalTitle: String? = null,
 
-    var overview: String? = null,
-    var popularity: Float = 0.0f,
+    val overview: String? = null,
+    val popularity: Float = 0.0f,
 
     @SerializedName("poster_path")
     @Expose
-    var posterPath: String? = null,
+    val posterPath: String? = null,
 
     @SerializedName("release_date")
     @Expose
-    var releaseDate: String? = null,
+    val releaseDate: String? = null,
 
-    var title: String? = null,
-    var video: Boolean = false,
+    val title: String? = null,
+    val video: Boolean = false,
 
     @SerializedName("vote_average")
     @Expose
-    var voteAverage: Float = 0.0f,
+    val voteAverage: Float = 0.0f,
 
     @SerializedName("vote_count")
     @Expose
-    var voteCount: Int = 0
+    val voteCount: Int = 0
 )
