@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavDirections
 import com.dpfht.tmdbmvvm.base.BaseViewModel
-import com.dpfht.tmdbmvvm.data.model.Genre
+import com.dpfht.tmdbmvvm.data.model.remote.Genre
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieGenreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

@@ -1,8 +1,8 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
 import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
-import com.dpfht.tmdbmvvm.data.model.Review
-import com.dpfht.tmdbmvvm.data.model.response.ReviewResponse
+import com.dpfht.tmdbmvvm.data.model.remote.Review
+import com.dpfht.tmdbmvvm.data.model.remote.response.ReviewResponse
 import com.dpfht.tmdbmvvm.data.repository.AppRepository
 
 class GetMovieReviewUseCaseImpl(

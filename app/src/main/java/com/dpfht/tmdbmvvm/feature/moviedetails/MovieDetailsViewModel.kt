@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavDirections
 import com.dpfht.tmdbmvvm.Config
 import com.dpfht.tmdbmvvm.base.BaseViewModel
-import com.dpfht.tmdbmvvm.data.model.response.MovieDetailsResponse
+import com.dpfht.tmdbmvvm.data.model.remote.response.MovieDetailsResponse
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

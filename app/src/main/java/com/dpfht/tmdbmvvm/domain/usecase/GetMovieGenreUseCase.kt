@@ -1,6 +1,6 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
-import com.dpfht.tmdbmvvm.data.model.Genre
+import com.dpfht.tmdbmvvm.data.model.remote.Genre
 
 interface GetMovieGenreUseCase {
 

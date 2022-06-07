@@ -1,6 +1,6 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
-import com.dpfht.tmdbmvvm.data.model.response.MovieDetailsResponse
+import com.dpfht.tmdbmvvm.data.model.remote.response.MovieDetailsResponse
 
 interface GetMovieDetailsUseCase {
 

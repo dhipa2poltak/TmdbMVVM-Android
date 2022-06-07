@@ -1,8 +1,8 @@
 package com.dpfht.tmdbmvvm.domain.usecase
 
 import com.dpfht.tmdbmvvm.data.api.CallbackWrapper
-import com.dpfht.tmdbmvvm.data.model.Movie
-import com.dpfht.tmdbmvvm.data.model.response.DiscoverMovieByGenreResponse
+import com.dpfht.tmdbmvvm.data.model.remote.Movie
+import com.dpfht.tmdbmvvm.data.model.remote.response.DiscoverMovieByGenreResponse
 import com.dpfht.tmdbmvvm.data.repository.AppRepository
 
 class GetMovieByGenreUseCaseImpl(

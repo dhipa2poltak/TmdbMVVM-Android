@@ -1,8 +1,8 @@
 package com.dpfht.tmdbmvvm.di
 
-import com.dpfht.tmdbmvvm.data.model.Genre
-import com.dpfht.tmdbmvvm.data.model.Movie
-import com.dpfht.tmdbmvvm.data.model.Review
+import com.dpfht.tmdbmvvm.data.model.remote.Genre
+import com.dpfht.tmdbmvvm.data.model.remote.Movie
+import com.dpfht.tmdbmvvm.data.model.remote.Review
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
