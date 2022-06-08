@@ -4,6 +4,7 @@ import com.dpfht.tmdbmvvm.data.api.RestService
 import com.dpfht.tmdbmvvm.data.api.ResultWrapper.GenericError
 import com.dpfht.tmdbmvvm.data.api.ResultWrapper.NetworkError
 import com.dpfht.tmdbmvvm.data.api.ResultWrapper.Success
+import com.dpfht.tmdbmvvm.data.model.remote.response.toDomain
 import com.dpfht.tmdbmvvm.domain.model.GetMovieByGenreResult
 import com.dpfht.tmdbmvvm.domain.model.GetMovieDetailsResult
 import com.dpfht.tmdbmvvm.domain.model.GetMovieGenreResult
@@ -19,7 +20,7 @@ class AppRepositoryImpl(private val restService: RestService): AppRepository {
   override suspend fun getMovieGenre():  UseCaseResultWrapper<GetMovieGenreResult> {
     return when (val result = safeApiCall(Dispatchers.IO) { restService.getMovieGenre() }) {
       is Success -> {
-        UseCaseResultWrapper.Success(GetMovieGenreResult(result.value.genres ?: arrayListOf()))
+        UseCaseResultWrapper.Success(result.value.toDomain())
       }
       is GenericError -> {
         if (result.code != null && result.error != null) {
@@ -37,8 +38,7 @@ class AppRepositoryImpl(private val restService: RestService): AppRepository {
   override suspend fun getMoviesByGenre(genreId: String, page: Int): UseCaseResultWrapper<GetMovieByGenreResult> {
     return when (val result = safeApiCall(Dispatchers.IO) { restService.getMoviesByGenre(genreId, page) }) {
       is Success -> {
-        val movies = result.value.results ?: arrayListOf()
-        UseCaseResultWrapper.Success(GetMovieByGenreResult(movies, result.value.page))
+        UseCaseResultWrapper.Success(result.value.toDomain())
       }
       is GenericError -> {
         if (result.code != null && result.error != null) {
@@ -56,12 +56,7 @@ class AppRepositoryImpl(private val restService: RestService): AppRepository {
   override suspend fun getMovieDetail(movieId: Int): UseCaseResultWrapper<GetMovieDetailsResult> {
     return when (val result = safeApiCall(Dispatchers.IO) { restService.getMovieDetail(movieId) }) {
       is Success -> {
-        UseCaseResultWrapper.Success(GetMovieDetailsResult(
-          result.value.id,
-          result.value.title ?: "",
-          result.value.overview ?: "",
-          result.value.posterPath ?: ""
-        ))
+        UseCaseResultWrapper.Success(result.value.toDomain())
       }
       is GenericError -> {
         if (result.code != null && result.error != null) {
@@ -79,8 +74,7 @@ class AppRepositoryImpl(private val restService: RestService): AppRepository {
   override suspend fun getMovieReviews(movieId: Int, page: Int): UseCaseResultWrapper<GetMovieReviewResult> {
     return when (val result = safeApiCall(Dispatchers.IO) { restService.getMovieReviews(movieId, page) }) {
       is Success -> {
-        val reviews = result.value.results ?: arrayListOf()
-        UseCaseResultWrapper.Success(GetMovieReviewResult(reviews, result.value.page))
+        UseCaseResultWrapper.Success(result.value.toDomain())
       }
       is GenericError -> {
         if (result.code != null && result.error != null) {
@@ -98,8 +92,7 @@ class AppRepositoryImpl(private val restService: RestService): AppRepository {
   override suspend fun getMovieTrailer(movieId: Int): UseCaseResultWrapper<GetMovieTrailerResult> {
     return when (val result = safeApiCall(Dispatchers.IO) { restService.getMovieTrailers(movieId) }) {
       is Success -> {
-        val trailers = result.value.results ?: arrayListOf()
-        UseCaseResultWrapper.Success(GetMovieTrailerResult(trailers))
+        UseCaseResultWrapper.Success(result.value.toDomain())
       }
       is GenericError -> {
         if (result.code != null && result.error != null) {
