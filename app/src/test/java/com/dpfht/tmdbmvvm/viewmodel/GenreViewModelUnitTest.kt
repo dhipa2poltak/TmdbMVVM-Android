@@ -2,7 +2,7 @@ package com.dpfht.tmdbmvvm.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.dpfht.testnews.MainCoroutineRule
+import com.dpfht.tmdbmvvm.MainCoroutineRule
 import com.dpfht.tmdbmvvm.data.model.remote.Genre
 import com.dpfht.tmdbmvvm.domain.model.GetMovieGenreResult
 import com.dpfht.tmdbmvvm.domain.usecase.GetMovieGenreUseCase

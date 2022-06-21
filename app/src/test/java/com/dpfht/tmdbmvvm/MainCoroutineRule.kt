@@ -1,4 +1,4 @@
-package com.dpfht.testnews
+package com.dpfht.tmdbmvvm
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
