@@ -37,7 +37,7 @@ class GenreViewModelUnitTest {
   private lateinit var notifyItemInsertedObserver: Observer<Int>
 
   @Mock
-  private lateinit var showDialogObserver: Observer<Boolean>
+  private lateinit var showLoadingObserver: Observer<Boolean>
 
   @Mock
   private lateinit var errorMessageObserver: Observer<String>
@@ -62,12 +62,12 @@ class GenreViewModelUnitTest {
     whenever(getMovieGenreUseCase.invoke()).thenReturn(result)
 
     viewModel.notifyItemInserted.observeForever(notifyItemInsertedObserver)
-    viewModel.isShowDialogLoading.observeForever(showDialogObserver)
+    viewModel.isShowDialogLoading.observeForever(showLoadingObserver)
 
     viewModel.start()
 
     verify(notifyItemInsertedObserver).onChanged(eq(listOfGenres.size - 1))
-    verify(showDialogObserver).onChanged(eq(false))
+    verify(showLoadingObserver).onChanged(eq(false))
   }
 
   @Test
@@ -78,11 +78,11 @@ class GenreViewModelUnitTest {
     whenever(getMovieGenreUseCase.invoke()).thenReturn(result)
 
     viewModel.errorMessage.observeForever(errorMessageObserver)
-    viewModel.isShowDialogLoading.observeForever(showDialogObserver)
+    viewModel.isShowDialogLoading.observeForever(showLoadingObserver)
 
     viewModel.start()
 
     verify(errorMessageObserver).onChanged(eq(msg))
-    verify(showDialogObserver).onChanged(eq(false))
+    verify(showLoadingObserver).onChanged(eq(false))
   }
 }

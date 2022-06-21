@@ -37,7 +37,7 @@ class MovieReviewViewModelUnitTest {
   private lateinit var notifyItemInsertedObserver: Observer<Int>
 
   @Mock
-  private lateinit var showDialogObserver: Observer<Boolean>
+  private lateinit var showLoadingObserver: Observer<Boolean>
 
   @Mock
   private lateinit var errorMessageObserver: Observer<String>
@@ -64,13 +64,13 @@ class MovieReviewViewModelUnitTest {
     whenever(getMovieReviewUseCase.invoke(movieId, page)).thenReturn(result)
 
     viewModel.notifyItemInserted.observeForever(notifyItemInsertedObserver)
-    viewModel.isShowDialogLoading.observeForever(showDialogObserver)
+    viewModel.isShowDialogLoading.observeForever(showLoadingObserver)
 
     viewModel.setMovieId(movieId)
     viewModel.start()
 
     verify(notifyItemInsertedObserver).onChanged(eq(listOfReview.size - 1))
-    verify(showDialogObserver).onChanged(eq(false))
+    verify(showLoadingObserver).onChanged(eq(false))
   }
 
   @Test
@@ -84,12 +84,12 @@ class MovieReviewViewModelUnitTest {
     whenever(getMovieReviewUseCase.invoke(movieId, page)).thenReturn(result)
 
     viewModel.errorMessage.observeForever(errorMessageObserver)
-    viewModel.isShowDialogLoading.observeForever(showDialogObserver)
+    viewModel.isShowDialogLoading.observeForever(showLoadingObserver)
 
     viewModel.setMovieId(movieId)
     viewModel.start()
 
     verify(errorMessageObserver).onChanged(eq(msg))
-    verify(showDialogObserver).onChanged(eq(false))
+    verify(showLoadingObserver).onChanged(eq(false))
   }
 }

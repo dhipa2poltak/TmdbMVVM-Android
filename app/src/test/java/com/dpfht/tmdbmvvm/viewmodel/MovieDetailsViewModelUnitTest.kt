@@ -43,7 +43,7 @@ class MovieDetailsViewModelUnitTest {
   private lateinit var imageUrlObserver: Observer<String>
 
   @Mock
-  private lateinit var showDialogObserver: Observer<Boolean>
+  private lateinit var showLoadingObserver: Observer<Boolean>
 
   @Mock
   private lateinit var errorMessageObserver: Observer<String>
@@ -74,7 +74,7 @@ class MovieDetailsViewModelUnitTest {
     viewModel.titleData.observeForever(titleObserver)
     viewModel.overviewData.observeForever(overviewObserver)
     viewModel.imageUrlData.observeForever(imageUrlObserver)
-    viewModel.isShowDialogLoading.observeForever(showDialogObserver)
+    viewModel.isShowDialogLoading.observeForever(showLoadingObserver)
 
     viewModel.setMovieId(movieId)
     viewModel.start()
@@ -85,7 +85,7 @@ class MovieDetailsViewModelUnitTest {
     val imageUrl = Config.IMAGE_URL_BASE_PATH + posterPath
     verify(imageUrlObserver).onChanged(eq(imageUrl))
 
-    verify(showDialogObserver).onChanged(eq(false))
+    verify(showLoadingObserver).onChanged(eq(false))
   }
 
   @Test
@@ -98,12 +98,12 @@ class MovieDetailsViewModelUnitTest {
     whenever(getMovieDetailsUseCase.invoke(movieId)).thenReturn(result)
 
     viewModel.errorMessage.observeForever(errorMessageObserver)
-    viewModel.isShowDialogLoading.observeForever(showDialogObserver)
+    viewModel.isShowDialogLoading.observeForever(showLoadingObserver)
 
     viewModel.setMovieId(movieId)
     viewModel.start()
 
     verify(errorMessageObserver).onChanged(eq(msg))
-    verify(showDialogObserver).onChanged(eq(false))
+    verify(showLoadingObserver).onChanged(eq(false))
   }
 }
